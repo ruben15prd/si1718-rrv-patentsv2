@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/si1718/si1718-rrv-patents.git"
+    "url": "git+https://github.com/si1718/si1718-rrv-patents.git",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
