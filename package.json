@@ -1,0 +1,22 @@
+{
+  "name": "si1718-rrv-patents",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/si1718/si1718-rrv-patents.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/si1718/si1718-rrv-patents/issues"
+  },
+  "homepage": "https://github.com/si1718/si1718-rrv-patents#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
