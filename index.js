@@ -110,21 +110,21 @@ app.get(BASE_API_PATH + "/patents", function (request, response) {
 
 // GET a single resource
 
-app.get(BASE_API_PATH + "/patents/:patentId", function (request, response) {
+app.get(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
-    var patentId = request.params.patentId;
+    var idPatent = request.params.idPatent;
 
-    if (!patentId) {
+    if (!idPatent) {
 
-        console.log("WARNING: New GET request to /patents/:patentId without patentId, sending 400...");
+        console.log("WARNING: New GET request to /patents/:idPatent without idPatent, sending 400...");
 
         response.sendStatus(400); // bad request
 
     } else {
 
-        console.log("INFO: New GET request to /patents/" + patentId);
+        console.log("INFO: New GET request to /patents/" + idPatent);
 
-         db.findOne({ "patentId": patentId }, (err, filteredPatent) => {
+         db.findOne({ "idPatent": idPatent }, (err, filteredPatent) => {
 
             if (err) {
 
@@ -146,7 +146,7 @@ app.get(BASE_API_PATH + "/patents/:patentId", function (request, response) {
 
                 else {
 
-                    console.log("WARNING: There is not any patent with patentId " + patentId);
+                    console.log("WARNING: There is not any patent with idPatent " + idPatent);
 
                     response.sendStatus(404);
 
@@ -213,7 +213,13 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                     } else {
 
                         console.log("INFO: Adding patent " + JSON.stringify(newPatent, 2, null));
-
+                        //Creating idPatent
+                        //Delete spaces and convert to lowercase and replace strange characters
+                        var nameFormat = newPatent.name.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+                        //Concatenate date
+                        var nameDate = nameFormat + newPatent.date;
+                        
+                        newPatent.idPatent = nameDate;
                         db.insert(newPatent);
 
                         response.sendStatus(201); // created
@@ -236,11 +242,11 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
 
 //POST over a single resource
 
-app.post(BASE_API_PATH + "/patents/:patentId", function (request, response) {
+app.post(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
-    var patentId = request.params.patentId;
+    var idPatent = request.params.idPatent;
 
-    console.log("WARNING: New POST request to /patents/" + patentId + ", sending 405...");
+    console.log("WARNING: New POST request to /patents/" + idPatent + ", sending 405...");
 
     response.sendStatus(405); // method not allowed
 
@@ -262,15 +268,15 @@ app.put(BASE_API_PATH + "/patents", function (request, response) {
 
 
 
-// Estoy testeando a partir de aqui
+
 
 //PUT over a single resource
 
-app.put(BASE_API_PATH + "/patents/:patentId", function (request, response) {
+app.put(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
     var updatedPatent = request.body;
 
-    var patentId = request.params.patentId;
+    var idPatent = request.params.idPatent;
 
     if (!updatedPatent) {
 
@@ -280,7 +286,7 @@ app.put(BASE_API_PATH + "/patents/:patentId", function (request, response) {
 
     } else {
 
-        console.log("INFO: New PUT request to /patents/" + patentId + " with data " + JSON.stringify(updatedPatent, 2, null));
+        console.log("INFO: New PUT request to /patents/" + idPatent + " with data " + JSON.stringify(updatedPatent, 2, null));
 
         if (!updatedPatent.title || !updatedPatent.date || !updatedPatent.inventors) {
 
@@ -290,7 +296,7 @@ app.put(BASE_API_PATH + "/patents/:patentId", function (request, response) {
 
         } else {
 
-         db.findOne({ "patentId": patentId }, (err, filteredPatent) => {
+         db.findOne({ "idPatent": idPatent }, (err, filteredPatent) => {
 
             if (err) {
 
@@ -303,16 +309,16 @@ app.put(BASE_API_PATH + "/patents/:patentId", function (request, response) {
             else {
 
                 if (filteredPatent) {
-                        db.update({"patentId": patentId}, updatedPatent);
+                        db.update({"idPatent": idPatent}, updatedPatent);
 
-                        console.log("INFO: Modifying patent with patentId " + patentId + " with data " + JSON.stringify(updatedPatent, 2, null));
+                        console.log("INFO: Modifying patent with idPatent " + idPatent + " with data " + JSON.stringify(updatedPatent, 2, null));
 
                         response.send(updatedPatent); // return the updated patent
                 }
 
                 else {
 
-                    console.log("WARNING: There is not any patent with patentId " + patentId);
+                    console.log("WARNING: There is not any patent with idPatent " + idPatent);
 
                     response.sendStatus(404);
 
@@ -374,21 +380,21 @@ app.delete(BASE_API_PATH + "/patents", function (request, response) {
 
 //DELETE over a single resource
 
-app.delete(BASE_API_PATH + "/patents/:patentId", function (request, response) {
+app.delete(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
-    var patentId = request.params.patentId;
+    var idPatent = request.params.idPatent;
 
-    if (!patentId) {
+    if (!idPatent) {
 
-        console.log("WARNING: New DELETE request to /patents/:patentId without patentId, sending 400...");
+        console.log("WARNING: New DELETE request to /patents/:idPatent without idPatent, sending 400...");
 
         response.sendStatus(400); // bad request
 
     } else {
 
-        console.log("INFO: New DELETE request to /patents/" + patentId);
+        console.log("INFO: New DELETE request to /patents/" + idPatent);
 
-        db.remove({patentId: patentId}, {}, function (err, numRemoved) {
+        db.remove({"patentId": idPatent}, {}, function (err, numRemoved) {
 
             if (err) {
 
@@ -402,7 +408,7 @@ app.delete(BASE_API_PATH + "/patents/:patentId", function (request, response) {
 
                 if (numRemoved.result.n === 1) {
 
-                    console.log("INFO: The patent with patentId " + patentId + " has been succesfully deleted, sending 204...");
+                    console.log("INFO: The patent with idPatent " + idPatent + " has been succesfully deleted, sending 204...");
 
                     response.sendStatus(204); // no content
 
