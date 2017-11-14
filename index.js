@@ -418,7 +418,7 @@ app.delete(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
         console.log("INFO: New DELETE request to /patents/" + idPatent);
 
-        db.remove({"patentId": idPatent}, {}, function (err, numRemoved) {
+        db.remove({"idPatent": idPatent}, {}, function (err, numRemoved) {
 
             if (err) {
 
