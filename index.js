@@ -242,7 +242,6 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
 
 });
 
-//Voy testeando la api aqui
 
 
 
