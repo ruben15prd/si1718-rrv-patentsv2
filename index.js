@@ -12,6 +12,8 @@ var helmet = require("helmet");
 
 var path = require('path');
 
+var Type = require('type-of-is');
+
 
 
 var  MongoClient = require('mongodb').MongoClient;
@@ -213,15 +215,21 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                     } else {
 
                         console.log("INFO: Adding patent " + JSON.stringify(newPatent, 2, null));
-                        /*
+                        
                         //Creating idPatent
                         //Delete spaces and convert to lowercase and replace strange characters
-                        var nameFormat = newPatent.name.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
-                        //Concatenate date
-                        var nameDate = nameFormat + newPatent.date;
                         
-                        newPatent.idPatent = nameDate;
+                        /*
+                        var patentJson = JSON.stringify(newPatent, 2, null);
+                        var objectValue = JSON.parse(patentJson);
+                        var titleStr = objectValue['title'];
                         */
+                        var titleFormat = newPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+                        //Concatenate date
+                        var titleDate = titleFormat + newPatent.date;
+                        
+                        newPatent.idPatent = titleDate;
+                        
                         db.insert(newPatent);
 
                         response.sendStatus(201); // created
@@ -292,7 +300,7 @@ app.put(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
         if (!updatedPatent.title || !updatedPatent.date || !updatedPatent.inventors) {
 
-            console.log("WARNING: The contact " + JSON.stringify(updatedPatent, 2, null) + " is not well-formed, sending 422...");
+            console.log("WARNING: The patent " + JSON.stringify(updatedPatent, 2, null) + " is not well-formed, sending 422...");
 
             response.sendStatus(422); // unprocessable entity
 
@@ -311,6 +319,20 @@ app.put(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
             else {
 
                 if (filteredPatent) {
+                          //Editing idPatent
+                        //Delete spaces and convert to lowercase and replace strange characters
+                        
+                        /*
+                        var patentJson = JSON.stringify(newPatent, 2, null);
+                        var objectValue = JSON.parse(patentJson);
+                        var titleStr = objectValue['title'];
+                        */
+                        var titleFormat = updatedPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+                        //Concatenate date
+                        var titleDate = titleFormat + updatedPatent.date;
+                        
+                        updatedPatent.idPatent = titleDate;
+                    
                         db.update({"idPatent": idPatent}, updatedPatent);
 
                         console.log("INFO: Modifying patent with idPatent " + idPatent + " with data " + JSON.stringify(updatedPatent, 2, null));
