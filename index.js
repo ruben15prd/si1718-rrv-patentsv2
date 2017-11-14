@@ -189,8 +189,22 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
             response.sendStatus(422); // unprocessable entity
 
         } else {
+            
+            //Creating idPatent
+                        //Delete spaces and convert to lowercase and replace strange characters
+                        
+                        /*
+                        var patentJson = JSON.stringify(newPatent, 2, null);
+                        var objectValue = JSON.parse(patentJson);
+                        var titleStr = objectValue['title'];
+                        */
+                        var titleFormat = newPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+                        //Concatenate date
+                        var titleDate = titleFormat + newPatent.date;
+            
+            
 
-            db.find({}, function (err, patents) {
+            db.findOne({"idPatent": titleDate }, function (err, patent) {
 
                 if (err) {
 
@@ -199,16 +213,17 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                     response.sendStatus(500); // internal server error
 
                 } else {
+                    
+                    
+                    //var patentsBeforeInsertion = patents.filter((patent) => {
+                    //console.log("INFO: Sending patent: " + JSON.stringify(patent, 2, null));
+                        //return (patent.title.localeCompare(newPatent.title, "en", {'sensitivity': 'base'}) === 0);
 
-                    var patentsBeforeInsertion = patents.filter((patent) => {
+                    //});
 
-                        return (patent.idPatent.localeCompare(newPatent.idPatent, "en", {'sensitivity': 'base'}) === 0);
-
-                    });
-
-                    if (patentsBeforeInsertion.length > 0) {
-
-                        console.log("WARNING: The patent " + JSON.stringify(newPatent, 2, null) + " already extis, sending 409...");
+                    //if (patentsBeforeInsertion.length > 0) {
+                    if (patent) {
+                        console.log("WARNING: The patent " + JSON.stringify(newPatent, 2, null) + " already exists, sending 409...");
 
                         response.sendStatus(409); // conflict
 
@@ -246,7 +261,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
 
 });
 
-
+//Voy testeando la api aqui
 
 
 
