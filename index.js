@@ -191,16 +191,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
         } else {
             
             //Creating idPatent
-                        //Delete spaces and convert to lowercase and replace strange characters
-                        
-                        /*
-                        var patentJson = JSON.stringify(newPatent, 2, null);
-                        var objectValue = JSON.parse(patentJson);
-                        var titleStr = objectValue['title'];
-                        */
-                        var titleFormat = newPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
-                        //Concatenate date
-                        var titleDate = titleFormat + newPatent.date;
+            var titleDate = generateIdPatent(newPatent);
             
             
 
@@ -231,17 +222,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
 
                         console.log("INFO: Adding patent " + JSON.stringify(newPatent, 2, null));
                         
-                        //Creating idPatent
-                        //Delete spaces and convert to lowercase and replace strange characters
-                        
-                        /*
-                        var patentJson = JSON.stringify(newPatent, 2, null);
-                        var objectValue = JSON.parse(patentJson);
-                        var titleStr = objectValue['title'];
-                        */
-                        var titleFormat = newPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
-                        //Concatenate date
-                        var titleDate = titleFormat + newPatent.date;
+                        var titleDate = generateIdPatent(newPatent);
                         
                         newPatent.idPatent = titleDate;
                         
@@ -466,3 +447,20 @@ app.delete(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
     }
 
 });
+
+
+function generateIdPatent(patent) {
+    //Delete spaces and convert to lowercase and replace strange characters
+                        
+    /*
+    var patentJson = JSON.stringify(newPatent, 2, null);
+    var objectValue = JSON.parse(patentJson);
+    var titleStr = objectValue['title'];
+    */
+    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+    //Concatenate date
+    var titleDate = titleFormat + patent.date;
+                        
+    return titleDate;
+   
+} 
