@@ -213,6 +213,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                     } else {
 
                         console.log("INFO: Adding patent " + JSON.stringify(newPatent, 2, null));
+                        /*
                         //Creating idPatent
                         //Delete spaces and convert to lowercase and replace strange characters
                         var nameFormat = newPatent.name.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
@@ -220,6 +221,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                         var nameDate = nameFormat + newPatent.date;
                         
                         newPatent.idPatent = nameDate;
+                        */
                         db.insert(newPatent);
 
                         response.sendStatus(201); // created
