@@ -202,7 +202,7 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
 
                     var patentsBeforeInsertion = patents.filter((patent) => {
 
-                        return (patent.name.localeCompare(newPatent.name, "en", {'sensitivity': 'base'}) === 0);
+                        return (patent.idPatent.localeCompare(newPatent.idPatent, "en", {'sensitivity': 'base'}) === 0);
 
                     });
 
