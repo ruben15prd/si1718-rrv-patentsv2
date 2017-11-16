@@ -14,6 +14,8 @@ var path = require('path');
 
 var Type = require('type-of-is');
 
+var accents = require('remove-accents');
+
 
 
 var  MongoClient = require('mongodb').MongoClient;
@@ -449,9 +451,10 @@ function generateIdPatent(patent) {
     var objectValue = JSON.parse(patentJson);
     var titleStr = objectValue['title'];
     */
-    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "").removeAccents();
+    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+    titleFormat = accents.remove(titleFormat);
     //Concatenate date
-    var titleDate = titleFormat.trim().removeAccents() + patent.date.trim().removeAccents();
+    var titleDate = titleFormat.trim()+ patent.date.trim();
                         
     return titleDate;
    
