@@ -23,6 +23,7 @@
     "helmet": "^3.9.0",
     "mongodb": "^2.2.33",
     "path": "^0.12.7",
+    "remove-accents": "^0.4.2",
     "trim": "0.0.1",
     "type-of-is": "^3.5.1"
   }

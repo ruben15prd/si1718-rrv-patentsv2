@@ -315,16 +315,9 @@ app.put(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
                 if (filteredPatent) {
                           //Editing idPatent
-                        //Delete spaces and convert to lowercase and replace strange characters
+                        var titleDate = generateIdPatent(filteredPatent);
                         
-                        /*
-                        var patentJson = JSON.stringify(newPatent, 2, null);
-                        var objectValue = JSON.parse(patentJson);
-                        var titleStr = objectValue['title'];
-                        */
-                        var titleFormat = updatedPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
-                        //Concatenate date
-                        var titleDate = titleFormat + updatedPatent.date;
+                        
                         
                         updatedPatent.idPatent = titleDate;
                     
@@ -456,9 +449,9 @@ function generateIdPatent(patent) {
     var objectValue = JSON.parse(patentJson);
     var titleStr = objectValue['title'];
     */
-    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "").removeAccents();
     //Concatenate date
-    var titleDate = titleFormat + patent.date;
+    var titleDate = titleFormat.trim().removeAccents() + patent.date.trim().removeAccents();
                         
     return titleDate;
    
