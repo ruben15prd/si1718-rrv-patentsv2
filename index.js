@@ -317,7 +317,10 @@ app.put(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 
                 if (filteredPatent) {
                           //Editing idPatent
-                        var titleDate = generateIdPatent(filteredPatent);
+                        var titleFormat = filteredPatent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+                        titleFormat = accents.remove(titleFormat);
+                        //Concatenate date
+                        var titleDate = titleFormat.trim()+ filteredPatent.date.trim();
                         
                         
                         
