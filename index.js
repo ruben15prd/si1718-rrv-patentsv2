@@ -453,7 +453,7 @@ function generateIdPatent(patent) {
     var objectValue = JSON.parse(patentJson);
     var titleStr = objectValue['title'];
     */
-    var titleFormat = patent.title.trim().toLowerCase().replace(/[^a-zA-Z ]/g, "");
+    var titleFormat = patent.title.trim().toLowerCase().replaceAll(" ", "");
     titleFormat = accents.remove(titleFormat);
     //Concatenate date
     var titleDate = titleFormat.trim()+ patent.date.trim();
