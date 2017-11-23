@@ -1,0 +1,21 @@
+<h2>Edit contact {{contactName}}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Inventors</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{updatedContact.title}}</td>
+                <td>{{updatedContact.date}}</td>
+                <td><input ng-model="updatedContact.inventors" /></td>
+                <td>
+                    <button class="btn btn-primary" ng-click="updateContact()">Update</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>

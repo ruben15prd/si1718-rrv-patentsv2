@@ -1,0 +1,29 @@
+    <h2>Patents</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Inventors</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input ng-model="newContact.title" /></td>
+                <td><input ng-model="newContact.date" /></td>
+                <td><input ng-model="newContact.inventors" /></td>
+                <td>
+                    <button class="btn btn-primary" ng-click="addContact()">Add</button>
+                </td>
+            </tr>
+            <tr ng-repeat="contact in contacts">
+                <td><a href="#!/patents/{{contact.idPatent}}">{{contact.title}}</a></td>
+                <td>{{contact.date}}</td>
+                <td>{{contact.inventors}}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="deleteContact(contact.idPatent)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
