@@ -72,7 +72,7 @@ MongoClient.connect(mdbURL,{native_parser:true},function (err,database){
 
 var app = express();
 
-
+app.use(express.static(path.join(__dirname,"public")));
 
 app.use(bodyParser.json()); //use default json enconding/decoding
 
