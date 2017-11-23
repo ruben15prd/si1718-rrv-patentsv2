@@ -6,17 +6,17 @@ angular.module("PatentManagerApp")
             $http
                 .get("/api/v1/patents")
                 .then(function(response) {
-                    $scope.contacts = response.data;
+                    $scope.patents = response.data;
                 });
             
-            $scope.newContact={
+            $scope.newPatent={
             }
         }
     
-        $scope.addContact = function (){
+        $scope.addPatent = function (){
             
             $http
-                .post("/api/v1/patents/",$scope.newContact)
+                .post("/api/v1/patents/",$scope.newPatent)
                 .then(function(response) {
                     refresh();
                 }, function(error){
@@ -25,7 +25,7 @@ angular.module("PatentManagerApp")
             
         }
 
-        $scope.deleteContact = function (idPatent){
+        $scope.deletePatent = function (idPatent){
             
             $http
                 .delete("/api/v1/patents/"+idPatent)

@@ -10,19 +10,19 @@
         </thead>
         <tbody>
             <tr>
-                <td><input ng-model="newContact.title" /></td>
-                <td><input ng-model="newContact.date" /></td>
-                <td><input ng-model="newContact.inventors" /></td>
+                <td><input ng-model="newPatent.title" /></td>
+                <td><input ng-model="newPatent.date" /></td>
+                <td><input ng-model="newPatent.inventors" /></td>
                 <td>
-                    <button class="btn btn-primary" ng-click="addContact()">Add</button>
+                    <button class="btn btn-primary" ng-click="addPatent()">Add</button>
                 </td>
             </tr>
-            <tr ng-repeat="contact in contacts">
-                <td><a href="#!/patents/{{contact.idPatent}}">{{contact.title}}</a></td>
-                <td>{{contact.date}}</td>
-                <td>{{contact.inventors}}</td>
+            <tr ng-repeat="patent in patents">
+                <td><a href="#!/patents/{{patent.idPatent}}">{{patent.title}}</a></td>
+                <td>{{patent.date}}</td>
+                <td>{{patent.inventors}}</td>
                 <td>
-                    <button class="btn btn-danger" ng-click="deleteContact(contact.idPatent)">Delete</button>
+                    <button class="btn btn-danger" ng-click="deletePatent(patent.idPatent)">Delete</button>
                 </td>
             </tr>
         </tbody>
