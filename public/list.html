@@ -1,5 +1,8 @@
+        <div class="container">
     <h2>Patents</h2>
-    <table class="table">
+    
+
+    <table class="table" id="example">
         <thead>
             <tr>
                 <th>Title</th>
@@ -9,14 +12,6 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><input ng-model="newPatent.title" /></td>
-                <td><input ng-model="newPatent.date" /></td>
-                <td><input ng-model="newPatent.inventors" /></td>
-                <td>
-                    <button class="btn btn-primary" ng-click="addPatent()">Add</button>
-                </td>
-            </tr>
             <tr ng-repeat="patent in patents">
                 <td><a href="#!/patents/{{patent.idPatent}}">{{patent.title}}</a></td>
                 <td>{{patent.date}}</td>
@@ -27,3 +22,24 @@
             </tr>
         </tbody>
     </table>
+    
+    <br/>
+    <!-- <h2>Search</h2>  
+    
+    <b>Title: </b><input ng-model="tosearch.title" />
+    <br/>
+    <b>Date: (YYYY-MM-DD)</b><input ng-model="tosearch.date" />
+    <br/>
+    <b>Inventors: </b><input ng-model="tosearch.inventor" />
+    <br/>
+    -->
+    
+    <b>Search: </b><input ng-model="tosearch.search" />
+    <button class="btn btn-warning" ng-click="searchPatents()">Search</button>
+    
+    <br/>
+    <br/>
+    <button class="btn btn-success" onclick="location.href='#!/create';">Create patent</button>
+    
+    </div>
+    

@@ -1,21 +1,23 @@
+<div class="container">
 <h2>Edit patent</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Inventors</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{updatedPatent.title}}</td>
-                <td>{{updatedPatent.date}}</td>
-                <td><input ng-model="updatedPatent.inventors" /></td>
-                <td>
-                    <button class="btn btn-primary" ng-click="updatePatent()">Update</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    
+    
+    
+    
+    <br/>
+    <br/>
+    <b>Title: </b>{{updatedPatent.title}}
+    <br/>
+    <b>Date: </b>{{updatedPatent.date}}
+    <br/>
+    <b>Inventors: </b><input ng-model="updatedPatent.inventors" />
+    <br/>
+    <br/>
+    
+    <div>
+        {{error}}
+        
+    </div>
+    <button class="btn btn-info" onclick="location.href='#!';">Back</button>
+    <button class="btn btn-primary" ng-click="updatePatent()">Update</button>
+   </div> 

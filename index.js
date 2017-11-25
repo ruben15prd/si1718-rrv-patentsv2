@@ -87,8 +87,24 @@ app.use(helmet()); //improve security
 app.get(BASE_API_PATH + "/patents", function (request, response) {
 
     console.log("INFO: New GET request to /patents");
+    
+    var title = request.query.title;
+    var date = request.query.date;
+    var inventor = request.query.inventor;
+    
+    var search = request.query.search;
+    var query;
+    
+    
+    if(search){
+        var searchStr = String(search);
+        
+        query = { $or: [ { 'title': { '$regex': searchStr,"$options":"i" } }, { 'date': searchStr }, { 'inventors': searchStr }]};
 
-    db.find({}).toArray( function (err, patents) {
+    }
+    
+    console.info(request.query);
+    db.find(query).toArray( function (err, patents) {
 
         if (err) {
 

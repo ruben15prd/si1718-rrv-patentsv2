@@ -12,18 +12,18 @@ angular.module("PatentManagerApp")
             $scope.newPatent={
             }
         }
-    
-        $scope.addPatent = function (){
-            
-            $http
-                .post("/api/v1/patents/",$scope.newPatent)
+        
+        $scope.searchPatents = function(){
+            $http({
+                url: "/api/v1/patents",
+                params: $scope.tosearch
+            })
                 .then(function(response) {
-                    refresh();
-                }, function(error){
-                    alert(error.data);
+                    $scope.patents = response.data;
                 });
             
         }
+    
 
         $scope.deletePatent = function (idPatent){
             
