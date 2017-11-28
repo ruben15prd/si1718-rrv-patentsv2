@@ -20,9 +20,16 @@ angular.module("PatentManagerApp")
                     $location.path("/");
                 }, function(error){
                     
-                    if(error.status == '422'){
-                    $scope.error = "Please review the information entered in the fields";
-                    }
+                    if(String(error.status) != '200'){
+                    switch (String(error.status)) {
+                        case '422':
+                            $scope.error = "Please review the information entered in the fields";
+                            break;
+                        default:
+                            $scope.error = "Error, please contact administrator";
+}
+                    
+                    }  
                     //alert(error.data);
                 });
             
