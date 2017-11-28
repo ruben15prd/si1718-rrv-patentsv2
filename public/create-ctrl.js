@@ -23,21 +23,12 @@ angular.module("PatentManagerApp")
                 }, function(error){
                     console.log(error.status);
                     
-                    if(error.status != '200'){
-                    switch (error.status) {
-                        case '422':
-                            $scope.error = "Please review the information entered in the fields";
-                            break;
-                        case '409':
-                            $scope.error = "There is another patent with same name and date";
-                            break;
-                        default:
-                            $scope.error = "Error, please contact administrator";
-                            break;
-}
-                    
-                    }  
-                  
+                    if(error.status == '422'){
+                    $scope.error = "Please review the information entered in the fields";
+                    }
+                    if(error.status == '409'){
+                    $scope.error = "There is another patent with same name and date";
+                    }
                     //alert(error.data);
                 });
             
