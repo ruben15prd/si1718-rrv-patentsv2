@@ -463,8 +463,10 @@ function generateIdPatent(patent) {
     */
     var titleFormat = patent.title.trim().toLowerCase();
     titleFormat = accents.remove(titleFormat).replace(/ /g,'');
+    
+    
     //Concatenate date
-    var titleDate = titleFormat.trim()+ patent.date.trim();
+    var titleDate = titleFormat.trim()+ patent.date.trim().replace(new RegExp("/", 'g'),'');
                         
     return titleDate;
    

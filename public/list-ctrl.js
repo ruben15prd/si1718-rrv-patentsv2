@@ -20,6 +20,13 @@ angular.module("PatentManagerApp")
             })
                 .then(function(response) {
                     $scope.patents = response.data;
+                    
+                    if(String(response.status) == '200' && response.data.length == 0){
+                    
+                            $scope.error = "No patents found";
+                        
+}
+
                 });
             
         }
