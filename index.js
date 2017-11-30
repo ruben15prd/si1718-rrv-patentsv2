@@ -16,6 +16,10 @@ var Type = require('type-of-is');
 
 var accents = require('remove-accents');
 
+var cors = require('cors');
+
+var randToken = require('rand-token');
+
 
 
 var  MongoClient = require('mongodb').MongoClient;
@@ -466,7 +470,7 @@ function generateIdPatent(patent) {
     
     
     //Concatenate date
-    var titleDate = titleFormat.trim()+ patent.date.trim().replace(new RegExp("/", 'g'),'');
+    var titleDate = titleFormat.trim()+ patent.date.trim().replace(new RegExp("[/-]", 'g'),'');
                         
     return titleDate;
    
