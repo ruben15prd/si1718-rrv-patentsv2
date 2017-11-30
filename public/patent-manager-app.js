@@ -12,6 +12,9 @@ angular.module("PatentManagerApp", ["ngRoute"])
             }).when("/create",{
                 templateUrl: "create.html",
                 controller : "CreateCtrl"
+            }).when("/graph",{
+                templateUrl: "graph.html",
+                controller : "GraphCtrl"
             });
         
         console.log("App Initialized");            
