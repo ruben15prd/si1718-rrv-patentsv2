@@ -8,6 +8,7 @@
                 <th>Title</th>
                 <th>Date</th>
                 <th>Inventors</th>
+                <th>Keywords</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -16,6 +17,7 @@
                 <td><a href="#!/patents/{{patent.idPatent}}">{{patent.title}}</a></td>
                 <td>{{patent.date}}</td>
                 <td>{{patent.inventors}}</td>
+                <td>{{patent.keywords}}</td>
                 <td>
                     <button class="btn btn-danger" ng-click="deletePatent(patent.idPatent)">Delete</button>
                 </td>

@@ -20,6 +20,9 @@ var cors = require('cors');
 
 var randToken = require('rand-token');
 
+var isURL = require('is-url');
+
+
 
 
 var  MongoClient = require('mongodb').MongoClient;
@@ -76,11 +79,14 @@ MongoClient.connect(mdbURL,{native_parser:true},function (err,database){
 
 var app = express();
 
+app.use(cors());
+
 app.use(express.static(path.join(__dirname,"public")));
 
 app.use(bodyParser.json()); //use default json enconding/decoding
 
 app.use(helmet()); //improve security
+
 
 
 
@@ -103,7 +109,7 @@ app.get(BASE_API_PATH + "/patents", function (request, response) {
     if(search){
         var searchStr = String(search);
         
-        query = { $or: [ { 'title': { '$regex': searchStr,"$options":"i" } }, { 'date': searchStr }, { 'inventors': searchStr }]};
+        query = { $or: [ { 'title': { '$regex': searchStr,"$options":"i" } }, { 'date': searchStr }, { 'inventors': searchStr }, { 'keywords': searchStr }]};
 
     }
     
@@ -247,6 +253,16 @@ app.post(BASE_API_PATH + "/patents", function (request, response) {
                         var titleDate = generateIdPatent(newPatent);
                         
                         newPatent.idPatent = titleDate;
+                        
+                       //Pasamos los strings a colecciones tanto de inventors como de keywords
+                        var inventorsCollection = inventorsStrToCollection(newPatent);
+                        
+                        newPatent.inventors = inventorsCollection;
+                        
+                        var keywordsCollection = keywordsStrToCollection(newPatent);
+                        
+                        newPatent.keywords = keywordsCollection;
+                        
                         
                         db.insert(newPatent);
 
@@ -475,3 +491,31 @@ function generateIdPatent(patent) {
     return titleDate;
    
 } 
+
+function inventorsStrToCollection(patent) {
+    var inventorsCollection = [];
+                        
+                        var split = patent.inventors.split(",");
+                        
+                        for(var i in split){
+                            inventorsCollection.push(split[i]);
+                        }
+    return inventorsCollection;
+   
+} 
+
+function keywordsStrToCollection(patent) {
+    var keywordsCollection = [];
+                        
+                        var split = patent.keywords.split(",");
+                        
+                        for(var i in split){
+                            keywordsCollection.push(split[i]);
+                        }
+    return keywordsCollection;
+   
+} 
+
+
+
+
