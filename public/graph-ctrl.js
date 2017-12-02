@@ -142,9 +142,10 @@ angular.module("PatentManagerApp")
                         
                         var idEncontrado = searchResearcherId(String(inventor));
                         var numPats;
-                        console.log("id: "+idEncontrado);
+                        
                         //console.log("id: "+idEncontrado);
                         if(!idEncontrado == ""){
+                            console.log("id: "+idEncontrado);
                             numPats = numOfPatentsInventor(idEncontrado);
                         }else{
                             numPats = 0;
@@ -240,6 +241,7 @@ Highcharts.chart('container2', {
         for(var q in $scope.data){
            var inventors = $scope.data[q].inventors;
            for(var q in inventors){
+               console.log("inventor: "+inventors[q] +" comparando con el id: "+inventorId)
                if(inventors[q].includes(inventorId)){
                    res = res + 1;
                    break;
