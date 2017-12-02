@@ -3,6 +3,7 @@ angular.module("PatentManagerApp")
 
 
         function refresh() {
+            
             $http
                 .get("/api/v1/patents")
                 .then(function(response) {
@@ -87,17 +88,160 @@ angular.module("PatentManagerApp")
 
     }]
 });
+
+
                     
 
+
+                }).then(function(response) {
+                  // Generamos el segundo diagrama
+                  
+                 // Obtenemos todos los investigadores 
+                  $http
+                .get("https://si1718-dfr-researchers.herokuapp.com/api/v1/researchers")
+                .then(function(response) {
+                    $scope.allResearchers = response.data;
+                
+                    
+                    
+                    
+                    //Obtenemos los grupos y sus investigadores
+                    $http
+                .get("https://si1718-rgg-groups.herokuapp.com/api/v1/groups")
+                .then(function(response) {
+                    $scope.data = response.data;
+                    
+                    var peticion = [];
+                    
+                    for(var i in $scope.data) {
+                        var idGroup = $scope.data[i].idGroup;
+                        var components = $scope.data[i].components;
+                        
+                        peticion.push({
+                            key:   idGroup,
+                            value: components
+                        });
+                        
+                }
+                // Recorremos el diccionario
+                var departmentIds = [];
+                var numPatentsPerGroup = [];
+                
+                
+                for(var i in peticion) {
+                var numPatents = 0;
+                var departmentId = peticion[i].key;
+                departmentIds.push(departmentId);
+                        
+                var inventors = peticion[i].value;
+                for (var j = 0; j < inventors.length; j++) {
+                            
+                var inventor = inventors[j];
+                 //Obtenemos la id del investigador
+                
+                        var idEncontrado = searchResearcherId(String(inventor));
+                
+                        //console.log("id: "+idEncontrado);
+                        var numPats = numOfPatentsInventor(idEncontrado);
+                          
+                }
+    
+                  console.log(numPats);       
+                  numPatentsPerGroup.push(numPats); 
+                }
+                console.log("departmentIds: "+ departmentIds);
+                console.log("patents: "+ numPatentsPerGroup);
+                
+                
+                    
+Highcharts.chart('container2', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Patens per group of researchers'
+    },
+    subtitle: {
+        text: 'Source: Groups'
+    },
+    xAxis: {
+        categories: departmentIds,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Patents per group'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Patents',
+        data: numPatentsPerGroup
+
+    }]
+});
+
+
+
                     
 
 
-
+                })
+ 
+                    
                 });
+                    
+                }
+                    
+                    
+                    );
+                
+            
 
         }
 
 
         refresh();
+        function searchResearcherId(busqueda){
+        var res = "";
+        
+        for(var q in $scope.allResearchers){
+            if(String($scope.allResearchers[q].name) == busqueda){
+                    res = $scope.allResearchers[q].idResearcher;
+                    break;
+            }
+            }
+            return res;    
+        }
+        
+        function numOfPatentsInventor(inventorId){
+        var res = 0;
+        
+        for(var q in $scope.data){
+           var inventors = $scope.data[q].inventors;
+           for(var q in inventors){
+               if(inventors[q].includes(inventorId)){
+                   res = res + 1;
+                   break;
+               } 
+               
+           }
+            }
+            return res;    
+        }
 
     }]);

@@ -11,7 +11,6 @@ angular.module("PatentManagerApp")
                 .then(function(response) {
                     $scope.updatedPatent = response.data;
                     
-                    console.log("longitud:"+$scope.updatedPatent.inventors[0]);
                 if($scope.updatedPatent.inventors.length>0){
                     inventor = String($scope.updatedPatent.inventors[0]);
                 }
