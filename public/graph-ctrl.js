@@ -134,15 +134,21 @@ angular.module("PatentManagerApp")
                 departmentIds.push(departmentId);
                         
                 var inventors = peticion[i].value;
+                
                 for (var j = 0; j < inventors.length; j++) {
                             
                 var inventor = inventors[j];
                  //Obtenemos la id del investigador
-                
+                        
                         var idEncontrado = searchResearcherId(String(inventor));
-                
+                        var numPats;
+                        console.log("id: "+idEncontrado);
                         //console.log("id: "+idEncontrado);
-                        var numPats = numOfPatentsInventor(idEncontrado);
+                        if(!idEncontrado == ""){
+                            numPats = numOfPatentsInventor(idEncontrado);
+                        }else{
+                            numPats = 0;
+                        }
                           
                 }
     
