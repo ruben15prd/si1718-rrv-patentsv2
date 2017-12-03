@@ -506,12 +506,14 @@ function inventorsStrToCollection(patent) {
 
 function keywordsStrToCollection(patent) {
     var keywordsCollection = [];
-                        
-                        var split = patent.keywords.split(",");
+                        if(Array.isArray(patent.keywords)){
+                            var split = patent.keywords.split(",");
                         
                         for(var i in split){
                             keywordsCollection.push(split[i]);
                         }
+                        }
+                        
     return keywordsCollection;
    
 } 
