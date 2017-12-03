@@ -1,17 +1,19 @@
 angular.module("PatentManagerApp")
     .controller("GraphCtrl", ["$scope", "$http", function($scope, $http) {
-
-
+        
+        $scope.patentsGraph;
+        
         function refresh() {
             
             $http
                 .get("/api/v1/patents")
                 .then(function(response) {
                     $scope.data = response.data;
-                    
+                    $scope.patentsGraph = response.data;
                     var years = [];
                 // Recorremos las patentes para sacar los años    
                 for(var i in $scope.data) {
+                    
                         var year = $scope.data[i].date.split("-")[0];
                         var yearNumber = Number(year);
                         years.push(yearNumber);
@@ -141,23 +143,21 @@ angular.module("PatentManagerApp")
                  //Obtenemos la id del investigador
                         
                         var idEncontrado = searchResearcherId(String(inventor));
-                        var numPats;
                         
                         //console.log("id: "+idEncontrado);
                         if(!idEncontrado == ""){
-                            console.log("id: "+idEncontrado);
-                            numPats = numOfPatentsInventor(idEncontrado);
+                            numPatents = numPatents + numOfPatentsInventor(idEncontrado);
                         }else{
-                            numPats = 0;
+                            numPatents = 0;
                         }
                           
                 }
     
-                  console.log(numPats);       
-                  numPatentsPerGroup.push(numPats); 
+                  //console.log(numPatents);       
+                  numPatentsPerGroup.push(numPatents); 
                 }
-                console.log("departmentIds: "+ departmentIds);
-                console.log("patents: "+ numPatentsPerGroup);
+                //console.log("departmentIds: "+ departmentIds);
+                //console.log("patents: "+ numPatentsPerGroup);
                 
                 
                     
@@ -227,21 +227,23 @@ Highcharts.chart('container2', {
         var res = "";
         
         for(var q in $scope.allResearchers){
-            if(String($scope.allResearchers[q].name) == busqueda){
+            if(String($scope.allResearchers[q].name).includes(busqueda)){
                     res = $scope.allResearchers[q].idResearcher;
                     break;
             }
             }
+            //console.log("id: "+res);
             return res;    
         }
         
         function numOfPatentsInventor(inventorId){
         var res = 0;
         
-        for(var q in $scope.data){
-           var inventors = $scope.data[q].inventors;
+        for(var i in $scope.patentsGraph){
+           var inventors = $scope.patentsGraph[i].inventors;
+           //console.log($scope.patentsGraph[i].inventors);
            for(var q in inventors){
-               console.log("inventor: "+inventors[q] +" comparando con el id: "+inventorId)
+               //console.log("inventor: "+inventors[q] +" comparando con el id: "+inventorId);
                if(inventors[q].includes(inventorId)){
                    res = res + 1;
                    break;
