@@ -1,6 +1,6 @@
 
 describe('Add patent', function () {
-	it('should add a new contact', function (){
+	it('should add a new patent', function (){
 	browser.get("http://localhost:8080");
 	
 		var numPatentsBefore,numPatentsAfter;
