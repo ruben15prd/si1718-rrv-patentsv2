@@ -8,6 +8,8 @@ angular.module("PatentManagerApp")
             $http
                 .get("/api/v1/patents")
                 .then(function(response) {
+                    
+                    
                     $scope.data = response.data;
                     $scope.patentsGraph = response.data;
                     var years = [];
@@ -96,6 +98,74 @@ angular.module("PatentManagerApp")
 
 
                 }).then(function(response) {
+                    
+                    
+                    $http
+                .get("https://si1718-rgg-groups.herokuapp.com/api/v1/groups")
+                .then(function(response) {
+                     $scope.groups = response.data;
+                     
+                    var idGroups = [];
+                    var numInventorsPerGroup = [];
+                    
+                    for(var i in $scope.groups) {
+                        idGroups.push($scope.groups[i].idGroup);
+                        numInventorsPerGroup.push($scope.groups[i].components.length);
+                    
+                        
+                }
+                    
+                    
+                    Highcharts.chart('container2', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Inventors per group'
+    },
+    subtitle: {
+        text: 'Source: Inventors'
+    },
+    xAxis: {
+        categories: idGroups,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Inventors'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Inventors',
+        data: numInventorsPerGroup
+
+    }]
+});
+
+
+                    
+
+
+                });
+                    
+                    
+                    
+                    /*
                   // Generamos el segundo diagrama
                   
                  // Obtenemos todos los investigadores 
@@ -211,7 +281,14 @@ Highcharts.chart('container2', {
  
                     
                 });
-                    
+                 */  
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                 }
                     
                     
@@ -223,6 +300,7 @@ Highcharts.chart('container2', {
 
 
         refresh();
+        /*
         function searchResearcherId(busqueda){
         var res = "";
         
@@ -253,5 +331,5 @@ Highcharts.chart('container2', {
             }
             return res;    
         }
-
+*/
     }]);

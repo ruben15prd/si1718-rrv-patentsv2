@@ -121,6 +121,15 @@ angular.module("PatentManagerApp")
             
             }
             
+            $scope.change = function (){
+              
+              $scope.muestraValida = false;
+            
+                     
+        
+            
+            }
+            
         
         }]);
        
