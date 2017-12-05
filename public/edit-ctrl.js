@@ -1,6 +1,6 @@
 angular.module("PatentManagerApp")
-    .controller("EditCtrl", ["$scope", "$http", "$routeParams", "$location",
-        function($scope, $http, $routeParams, $location) {
+    .controller("EditCtrl", ["$scope", "$http", "$routeParams", "$location","$route",
+        function($scope, $http, $routeParams, $location, $route) {
         
             var inventor;
             
@@ -10,9 +10,18 @@ angular.module("PatentManagerApp")
                 .get("/api/v1/patents/"+$scope.patentId)
                 .then(function(response) {
                     $scope.updatedPatent = response.data;
-                    
+                  
                 if($scope.updatedPatent.inventors.length>0){
                     inventor = String($scope.updatedPatent.inventors[0]);
+                    $scope.inventorsCol=[];
+                     for(var i in $scope.updatedPatent.inventors){
+                        if($scope.updatedPatent.inventors[i].includes("https://") == true){
+                            $scope.inventorsCol.push($scope.updatedPatent.inventorName);
+                        }else{
+                            $scope.inventorsCol.push($scope.updatedPatent.inventors[i]);
+                        }
+                    }
+                    //console.log($scope.inventorsCol);
                 }
                 
                 if(inventor.includes("https://") == true){
@@ -37,9 +46,7 @@ angular.module("PatentManagerApp")
                     
                 });
                
-               
-                
-
+   
                 
             
             $scope.updatePatent = function (){
@@ -78,6 +85,115 @@ angular.module("PatentManagerApp")
                 });
             
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            $scope.deleteInventor = function (){
+                    
+                   $scope.updatedPatent.inventors.splice($scope.updatedPatent.inventors.length -1 , 1); 
+                    delete $scope.updatedPatent._id;
+              
+            //Pasamos los strings a colecciones tanto de inventors como de keywords
+             
+            var inventorsCollection = inventorsStrToCollection($scope.updatedPatent);
+                        
+            $scope.updatedPatent.inventors = inventorsCollection;
+            
+                     
+            var keywordsCollection = keywordsStrToCollection($scope.updatedPatent);
+                        
+            $scope.updatedPatent.keywords = keywordsCollection;
+            
+              $http
+                .put("/api/v1/patents/"+$scope.patentId,$scope.updatedPatent)
+                .then(function(response) {
+                    console.log("updated");
+                    $route.reload();
+                }, function(error){
+                    
+                    if(String(error.status) != '200'){
+                    switch (String(error.status)) {
+                        case '422':
+                            $scope.error = "Please review the information entered in the fields";
+                            break;
+                        default:
+                            $scope.error = "Error, please contact administrator";
+}
+                    
+                    }  
+                    //alert(error.data);
+                });
+            }
+            
+            
+             $scope.refresh = function (){
+                    $route.reload();
+            }
+            
+            $scope.addInventor = function (){
+                if($scope.updatedPatent.inventors.length == 0){
+                    $scope.updatedPatent.inventors = $scope.updatedPatent.inventors +""+$scope.inventorAdd;
+                }else{
+                    $scope.updatedPatent.inventors = $scope.updatedPatent.inventors +","+$scope.inventorAdd;
+                }
+                 delete $scope.updatedPatent._id;
+              
+            //Pasamos los strings a colecciones tanto de inventors como de keywords
+             
+            var inventorsCollection = inventorsStrToCollection($scope.updatedPatent);
+                        
+            $scope.updatedPatent.inventors = inventorsCollection;
+            
+                     
+            var keywordsCollection = keywordsStrToCollection($scope.updatedPatent);
+                        
+            $scope.updatedPatent.keywords = keywordsCollection;
+            
+              $http
+                .put("/api/v1/patents/"+$scope.patentId,$scope.updatedPatent)
+                .then(function(response) {
+                    console.log("updated");
+                    $route.reload();
+                }, function(error){
+                    
+                    if(String(error.status) != '200'){
+                    switch (String(error.status)) {
+                        case '422':
+                            $scope.error = "Please review the information entered in the fields";
+                            break;
+                        default:
+                            $scope.error = "Error, please contact administrator";
+}
+                    
+                    }  
+                    //alert(error.data);
+                });
+            }
+            
+            
+            
+            
+            
             
             $scope.validatePatent = function (){
               
@@ -167,6 +283,9 @@ function keywordsStrToCollection(patent) {
        return patent.keywords; 
     }                  
     
+   
+
+
    
 } 
 
