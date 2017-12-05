@@ -199,7 +199,6 @@ app.get(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
 app.post(BASE_API_PATH + "/patents", function (request, response) {
 
     var newPatent = request.body;
-
     if (!newPatent) {
 
         console.log("WARNING: New POST request to /patents/ without patent, sending 400...");
@@ -506,7 +505,7 @@ function inventorsStrToCollection(patent) {
 
 function keywordsStrToCollection(patent) {
     var keywordsCollection = [];
-                        if(Array.isArray(patent.keywords)){
+                        if(!Array.isArray(patent.keywords)){
                             var split = patent.keywords.split(",");
                         
                         for(var i in split){

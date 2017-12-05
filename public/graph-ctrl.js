@@ -165,7 +165,7 @@ angular.module("PatentManagerApp")
                     
                     
                     
-                    /*
+                    
                   // Generamos el segundo diagrama
                   
                  // Obtenemos todos los investigadores 
@@ -231,7 +231,7 @@ angular.module("PatentManagerApp")
                 
                 
                     
-Highcharts.chart('container2', {
+Highcharts.chart('container3', {
     chart: {
         type: 'column'
     },
@@ -281,7 +281,7 @@ Highcharts.chart('container2', {
  
                     
                 });
-                 */  
+                   
                  
                  
                  
@@ -300,7 +300,7 @@ Highcharts.chart('container2', {
 
 
         refresh();
-        /*
+        
         function searchResearcherId(busqueda){
         var res = "";
         
@@ -331,5 +331,5 @@ Highcharts.chart('container2', {
             }
             return res;    
         }
-*/
+
     }]);

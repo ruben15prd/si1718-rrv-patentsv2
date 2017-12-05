@@ -15,7 +15,6 @@ angular.module("PatentManagerApp")
             
             $scope.createPatent = function (){
               
-            
              $http
                 .post("/api/v1/patents/",$scope.newPatent)
                 .then(function(response) {
