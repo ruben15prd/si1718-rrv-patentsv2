@@ -40,6 +40,10 @@ var BASE_API_PATH = "/api/v1";
 
 
 var db;
+var db2;
+var db3;
+var db4;
+var db5;
 
 
 
@@ -60,6 +64,10 @@ MongoClient.connect(mdbURL,{native_parser:true},function (err,database){
     
 
     db = database.collection("patents");
+    db2 = database.collection("batch");
+    db3 = database.collection("recomendations");
+    db4 = database.collection("optimizedViews");
+    db5 = database.collection("patentsAux");
 
     
 
@@ -470,6 +478,351 @@ app.delete(BASE_API_PATH + "/patents/:idPatent", function (request, response) {
     }
 
 });
+
+
+
+
+// GET statistics 2 data
+
+app.get(BASE_API_PATH + "/statistics2", function (request, response) {
+
+    console.log("INFO: New GET request to /statistics2");
+   
+    
+  
+    
+    db2.find().toArray( function (err, batch) {
+
+        if (err) {
+
+            console.error('WARNING: Error getting data from DB');
+
+            response.sendStatus(500); // internal server error
+
+        } else {
+
+            console.log("INFO: Sending batch: " + JSON.stringify(batch, 2, null));
+
+            response.send(batch);
+
+        }
+
+    });
+
+});
+
+
+
+
+// GET a single resource for recommendation
+
+app.get(BASE_API_PATH + "/recommendation/:idPatent", function (request, response) {
+
+    var idPatent = request.params.idPatent;
+
+    if (!idPatent) {
+
+        console.log("WARNING: New GET request to /patents/:idPatent without idPatent, sending 400...");
+
+        response.sendStatus(400); // bad request
+
+    } else {
+
+        console.log("INFO: New GET request to /patents/" + idPatent);
+
+         db3.findOne({ "patent": idPatent }, (err, filteredPatent) => {
+
+            if (err) {
+
+                console.error('WARNING: Error getting data from DB');
+
+                response.sendStatus(500);
+
+            }
+
+            else {
+
+                if (filteredPatent) {
+
+                    console.log("INFO: Sending patent: " + JSON.stringify(filteredPatent, 2, null));
+
+                    response.send(filteredPatent);
+
+                }
+
+                else {
+
+                    console.log("WARNING: There is not any patent with idPatent " + idPatent);
+
+                    response.sendStatus(404);
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+// GET optimizedViews
+
+app.get(BASE_API_PATH + "/optimizedViews", function (request, response) {
+
+    console.log("INFO: New GET request to /statistics2");
+   
+    
+  
+    
+    db4.find().toArray( function (err, batch) {
+
+        if (err) {
+
+            console.error('WARNING: Error getting data from DB');
+
+            response.sendStatus(500); // internal server error
+
+        } else {
+
+            console.log("INFO: Sending batch: " + JSON.stringify(batch, 2, null));
+
+            response.send(batch);
+
+        }
+
+    });
+
+});
+
+// GET a collection of patentsAux
+
+app.get(BASE_API_PATH + "/patentsAux", function (request, response) {
+
+    console.log("INFO: New GET request to /patents");
+    
+    var title = request.query.title;
+    var date = request.query.date;
+    var inventor = request.query.inventor;
+    
+    var search = request.query.search;
+    var query;
+    
+    
+    if(search){
+        var searchStr = String(search);
+        
+        query = { $or: [ { 'title': { '$regex': searchStr,"$options":"i" } }, { 'date': searchStr }, { 'inventors': searchStr }, { 'keywords': searchStr }]};
+
+    }
+    
+    console.info(request.query);
+    db5.find(query).toArray( function (err, patents) {
+
+        if (err) {
+
+            console.error('WARNING: Error getting data from DB');
+
+            response.sendStatus(500); // internal server error
+
+        } else {
+
+            console.log("INFO: Sending patents: " + JSON.stringify(patents, 2, null));
+
+            response.send(patents);
+
+        }
+
+    });
+
+});
+
+
+
+
+// GET a single resource of patentsAux
+
+app.get(BASE_API_PATH + "/patentsAux/:idPatent", function (request, response) {
+
+    var idPatent = request.params.idPatent;
+
+    if (!idPatent) {
+
+        console.log("WARNING: New GET request to /patents/:idPatent without idPatent, sending 400...");
+
+        response.sendStatus(400); // bad request
+
+    } else {
+
+        console.log("INFO: New GET request to /patents/" + idPatent);
+
+         db5.findOne({ "idPatent": idPatent }, (err, filteredPatent) => {
+
+            if (err) {
+
+                console.error('WARNING: Error getting data from DB');
+
+                response.sendStatus(500);
+
+            }
+
+            else {
+
+                if (filteredPatent) {
+
+                    console.log("INFO: Sending patent: " + JSON.stringify(filteredPatent, 2, null));
+
+                    response.send(filteredPatent);
+
+                }
+
+                else {
+
+                    console.log("WARNING: There is not any patent with idPatent " + idPatent);
+
+                    response.sendStatus(404);
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+
+
+//POST over a collection, create a patent from patentsAux
+
+app.post(BASE_API_PATH + "/addPatentsFromAux", function (request, response) {
+
+    var newPatent = request.body;
+    if (!newPatent) {
+
+        console.log("WARNING: New POST request to /patents/ without patent, sending 400...");
+
+        response.sendStatus(400); // bad request
+
+    } else {
+
+        console.log("INFO: New POST request to /patents with body: " + JSON.stringify(newPatent, 2, null));
+
+        if (!newPatent.title || !newPatent.date || !newPatent.inventors) {
+
+            console.log("WARNING: The patent " + JSON.stringify(newPatent, 2, null) + " is not well-formed, sending 422...");
+
+            response.sendStatus(422); // unprocessable entity
+
+        } else {
+            
+            //Creating idPatent
+            var titleDate = generateIdPatent(newPatent);
+            
+            
+
+            db.findOne({"idPatent": titleDate }, function (err, patent) {
+
+                if (err) {
+
+                    console.error('WARNING: Error getting data from DB');
+
+                    response.sendStatus(500); // internal server error
+
+                } else {
+                    
+                    
+                    //var patentsBeforeInsertion = patents.filter((patent) => {
+                    //console.log("INFO: Sending patent: " + JSON.stringify(patent, 2, null));
+                        //return (patent.title.localeCompare(newPatent.title, "en", {'sensitivity': 'base'}) === 0);
+
+                    //});
+
+                    //if (patentsBeforeInsertion.length > 0) {
+                    if (patent) {
+                        console.log("WARNING: The patent " + JSON.stringify(newPatent, 2, null) + " already exists, sending 409...");
+
+                        response.sendStatus(409); // conflict
+
+                    } else {
+
+                        console.log("INFO: Adding patent " + JSON.stringify(newPatent, 2, null));
+                        
+                        var titleDate = generateIdPatent(newPatent);
+                        
+                        newPatent.idPatent = titleDate;
+                        
+                        
+                        
+                        db.insert(newPatent);
+
+                        response.sendStatus(201); // created
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    }
+
+});
+
+
+//DELETE over a single resource of patentsAux
+
+app.delete(BASE_API_PATH + "/patentsAux/:idPatent", function (request, response) {
+
+    var idPatent = request.params.idPatent;
+
+    if (!idPatent) {
+
+        console.log("WARNING: New DELETE request to /patents/:idPatent without idPatent, sending 400...");
+
+        response.sendStatus(400); // bad request
+
+    } else {
+
+        console.log("INFO: New DELETE request to /patents/" + idPatent);
+
+        db5.remove({"idPatent": idPatent}, {}, function (err, numRemoved) {
+
+            if (err) {
+
+                console.error('WARNING: Error removing data from DB');
+
+                response.sendStatus(500); // internal server error
+
+            } else {
+
+                console.log("INFO: Patents removed: " + numRemoved.result.n);
+
+                if (numRemoved.result.n === 1) {
+
+                    console.log("INFO: The patent with idPatent " + idPatent + " has been succesfully deleted, sending 204...");
+
+                    response.sendStatus(204); // no content
+
+                } else {
+
+                    console.log("WARNING: There are no patents to delete");
+
+                    response.sendStatus(404); // not found
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+
 
 
 function generateIdPatent(patent) {

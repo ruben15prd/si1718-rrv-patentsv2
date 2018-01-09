@@ -44,7 +44,35 @@ angular.module("PatentManagerApp")
                             }
 
                         });
+                    // Mostramos las recomendaciones
+                    $scope.recommendations = [];
+                      $http
+                        .get("/api/v1/recommendation/" + $scope.patentId)
+                        .then(function(response) {
+                            $scope.recommendationsIds = response.data;
+                            
+                            
+                            for(var i in $scope.recommendationsIds.recomendations) {
+                                var idPatent = $scope.recommendationsIds.recomendations[i];
+                                
+                             
+                           $http
+                        .get("/api/v1/patents/"  + idPatent)
+                        .then(function(response) {
+                            $scope.recommendation = response.data;
+                            $scope.recommendations.push($scope.recommendation);
 
+                        });
+                         
+                    
+                        
+                 }
+                            
+                        });
+                    
+                    
+                    
+                    
 
                 });
 

@@ -6,51 +6,59 @@ angular.module("PatentManagerApp")
         function refresh() {
             
             $http
-                .get("/api/v1/patents")
+                //.get("/api/v1/patents")
+                .get("/api/v1/optimizedViews")
                 .then(function(response) {
                     
                     
-                    $scope.data = response.data;
-                    $scope.patentsGraph = response.data;
-                    var years = [];
-                // Recorremos las patentes para sacar los años    
-                for(var i in $scope.data) {
+                //     $scope.data = response.data;
+                //     $scope.patentsGraph = response.data;
+                //     var years = [];
+                // // Recorremos las patentes para sacar los años    
+                // for(var i in $scope.data) {
                     
-                        var year = $scope.data[i].date.split("-")[0];
-                        var yearNumber = Number(year);
-                        years.push(yearNumber);
-                }
-                // Ordenamos el array para coger el minimo y maximo
-                var yearsSort = years.sort();
+                //         var year = $scope.data[i].date.split("-")[0];
+                //         var yearNumber = Number(year);
+                //         years.push(yearNumber);
+                // }
+                // // Ordenamos el array para coger el minimo y maximo
+                // var yearsSort = years.sort();
                 
-                var startYear= yearsSort[0];
-                var finishYear = yearsSort[yearsSort.length - 1];
+                // var startYear= yearsSort[0];
+                // var finishYear = yearsSort[yearsSort.length - 1];
                 
-                var consecutiveYears=[];
-                //Generamos los años que queremos que tenga nuestro diagrama de barras
-                for(i = startYear ;i <= finishYear; i++) {
+                // var consecutiveYears=[];
+                // //Generamos los años que queremos que tenga nuestro diagrama de barras
+                // for(i = startYear ;i <= finishYear; i++) {
                     
-                    consecutiveYears.push(String(i));
-                }
-                //Generamos el numero de patentes para cada año
-                var patentsValuePerYear = [];
-                var numPatentsPerYear = 0;
+                //     consecutiveYears.push(String(i));
+                // }
+                // //Generamos el numero de patentes para cada año
+                // var patentsValuePerYear = [];
+                // var numPatentsPerYear = 0;
                 
-                var cont = startYear;
-                while (cont <= finishYear) {
+                // var cont = startYear;
+                // while (cont <= finishYear) {
                     
-                    for(var i in $scope.data) {
-                        var year = $scope.data[i].date.split("-")[0];
-                        var yearNumber = Number(year);
-                        if(cont == yearNumber){
-                            numPatentsPerYear = numPatentsPerYear +1;
-                        }
-                    }
-                    patentsValuePerYear.push(numPatentsPerYear);
-                    numPatentsPerYear = 0;
-                    cont++;
+                //     for(var i in $scope.data) {
+                //         var year = $scope.data[i].date.split("-")[0];
+                //         var yearNumber = Number(year);
+                //         if(cont == yearNumber){
+                //             numPatentsPerYear = numPatentsPerYear +1;
+                //         }
+                //     }
+                //     patentsValuePerYear.push(numPatentsPerYear);
+                //     numPatentsPerYear = 0;
+                //     cont++;
                     
-                }
+                // }
+                
+                
+                // OptimizedViews
+                    $scope.data = response.data[0];
+                    
+                    var consecutiveYears = $scope.data.consecutiveYears;
+                    var patentsValuePerYear = $scope.data.patentsValuePerYear;
                     
                     Highcharts.chart('container', {
     chart: {
@@ -100,20 +108,31 @@ angular.module("PatentManagerApp")
                 }).then(function(response) {
                     
                     
-                    $http
-                .get("https://si1718-rgg-groups.herokuapp.com/api/v1/groups")
-                .then(function(response) {
-                     $scope.groups = response.data;
+                //     $http
+                // .get("https://si1718-rgg-groups.herokuapp.com/api/v1/groups")
+                // .then(function(response) {
+                //      $scope.groups = response.data;
                      
-                    var idGroups = [];
-                    var numInventorsPerGroup = [];
+                //     var idGroups = [];
+                //     var numInventorsPerGroup = [];
                     
-                    for(var i in $scope.groups) {
-                        idGroups.push($scope.groups[i].idGroup);
-                        numInventorsPerGroup.push($scope.groups[i].components.length);
+                //     for(var i in $scope.groups) {
+                //         idGroups.push($scope.groups[i].idGroup);
+                //         numInventorsPerGroup.push($scope.groups[i].components.length);
                     
                         
-                }
+                // }
+                
+                 $http
+                .get("/api/v1/optimizedViews")
+                .then(function(response) {
+                
+                
+                // OptimizedViews
+                    $scope.data = response.data[0];
+                    
+                    var idGroups = $scope.data.idGroups;
+                    var numInventorsPerGroup = $scope.data.numInventorsPerGroup;
                     
                     
                     Highcharts.chart('container2', {
@@ -166,7 +185,7 @@ angular.module("PatentManagerApp")
                     
                     
                     
-                  // Generamos el segundo diagrama
+                  // Generamos el tercer diagrama
                   
                  // Obtenemos todos los investigadores 
                   $http
@@ -236,7 +255,7 @@ Highcharts.chart('container3', {
         type: 'column'
     },
     title: {
-        text: 'Patens per group of researchers'
+        text: 'Patents per group of researchers'
     },
     subtitle: {
         text: 'Source: Groups'

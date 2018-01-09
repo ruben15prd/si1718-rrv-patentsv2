@@ -1,0 +1,48 @@
+        <div class="container">
+    <h2>Patents</h2>
+    
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Inventors</th>
+                <th>Keywords</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="patent in patents">
+                <!--<td><a href="#!/patents/{{patent.idPatent}}">{{patent.title}}</a></td>-->
+                <td>{{patent.title}}</td>
+                <td>{{patent.date}}</td>
+                <td>{{patent.inventors}}</td>
+                <td>{{patent.keywords}}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="addToValidPatents(patent.idPatent)">Add to valid patents</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+     </div>
+    <br/>
+    <!-- <h2>Search</h2>  
+    
+    <b>Title: </b><input ng-model="tosearch.title" />
+    <br/>
+    <b>Date: (YYYY-MM-DD)</b><input ng-model="tosearch.date" />
+    <br/>
+    <b>Inventors: </b><input ng-model="tosearch.inventor" />
+    <br/>
+    -->
+    <div>
+        {{error}}
+        
+    </div>
+    
+    <br/>
+    <br/>
+    <button class="btn btn-info" onclick="location.href='#!';">Back</button>
+    </div>
+    
